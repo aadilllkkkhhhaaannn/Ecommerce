@@ -1,0 +1,134 @@
+import axios from "axios";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+const initialState = {
+  cartItems: [],
+  isLoading: false,
+};
+
+// for add to cart
+
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async ({ userId, productId, quantity }) => {
+    const response = await axios.post(
+      "https://e-commerce-backend-9rj8.onrender.com/api/shop/cart/add",
+      {
+        userId,
+        productId,
+        quantity,
+      }
+    );
+
+    return response.data;
+  }
+);
+
+// for fetch cart items
+
+export const fetchCartItems = createAsyncThunk(
+  "cart/fetchCartItems",
+  async (userId) => {
+    const response = await axios.get(
+      `https://e-commerce-backend-9rj8.onrender.com/api/shop/cart/get/${userId}`
+    );
+    return response.data;
+  }
+);
+
+// for delete items
+
+export const deleteCartItem = createAsyncThunk(
+  "cart/deleteCartItem",
+  async ({ userId, productId }) => {
+    const response = await axios.delete(
+      `https://e-commerce-backend-9rj8.onrender.com/api/shop/cart/${userId}/${productId}`
+    );
+    return response.data;
+  }
+);
+
+// for update quantity
+
+export const updateCartQuantity = createAsyncThunk(
+  "cart/updateCartQuantity",
+  async ({ userId, productId, quantity }) => {
+    const response = await axios.put(
+      "https://e-commerce-backend-9rj8.onrender.com/api/shop/cart/update-cart",
+      {
+        userId,
+        productId,
+        quantity,
+      }
+    );
+
+    return response.data;
+  }
+);
+
+const shoppingCartSlce = createSlice({
+  name: "shoppingCart",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+
+      // for add to cart
+
+      .addCase(addToCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCase(addToCart.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      })
+
+      // for update cart
+
+      .addCase(updateCartQuantity.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateCartQuantity.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCase(updateCartQuantity.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      })
+
+      // for delete cart
+
+      .addCase(deleteCartItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCartItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCase(deleteCartItem.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      })
+
+      // for fetch cart
+
+      .addCase(fetchCartItems.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCase(fetchCartItems.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      });
+  },
+});
+
+export default shoppingCartSlce.reducer;
