@@ -11,7 +11,7 @@ import AdminProducts from "./Pages/admin-view/products";
 import NotFound from "./Pages/not-found";
 import ShoppingAccount from "./Pages/shopping-view/account";
 import ShoppingCheckout from "./Pages/shopping-view/checkout";
-import ShoppingHome from "./Pages/shopping-view/Home";
+import ShoppingHome from "./Pages/shopping-view/home";
 import ShoppingListing from "./Pages/shopping-view/listing";
 import ShoppingLayout from "./components/shopping-view/layout";
 import CheckAuth from "./components/common/check-auth";
